@@ -1,0 +1,37 @@
+{
+  "name": "namaste_r",
+  "version": "1.0.0",
+  "description": "this is my learning episode01",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "jest --passWithNoTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "(https://github.com/soumyamanche/Namaste_react.git)"
+  },
+  "keywords": [
+    "soumya",
+    "react"
+  ],
+  "author": "soumya",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "parcel": "^2.16.3"
+  },
+  "dependencies": {
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router-dom": "^6.30.3"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "<rootDir>/backend/"
+    ]
+  },
+  "browserslist": [
+    "last 2 versions"
+  ]
+}

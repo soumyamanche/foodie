@@ -1,0 +1,563 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 40px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
+  position: sticky;  
+  top: 0;
+  z-index: 100;
+  width: 100%; 
+  margin: 0 auto;  
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hero-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 20px 0;
+  color: #333;
+}
+
+.filter {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.search {
+  display: flex;
+  gap: 10px;
+  align-items: center;  
+}
+
+.search-box {
+  padding: 12px 15px;
+  border-radius: 25px;
+  border: 1px solid #ddd;
+  width: 260px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.search-box:focus {
+  border-color: #ff7a00;
+}
+
+.search-btn {
+  background-color: #ff7a00;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+
+.filter-btn {
+  background-color: #ff7a00;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.search-btn,
+.filter-btn {
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.search-btn:hover,
+.filter-btn:hover {
+  background-color: #e66a00;
+}
+
+.logo {
+  height: 60px;
+  width: 60px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.nav-items ul {
+  display: flex;      
+  align-items: center;
+  list-style: none;    
+   gap: 24px;             
+  margin-left: auto;  
+}
+
+.nav-items a,
+.nav-items p {
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+
+.nav-items a:hover,
+.nav-items p:hover {
+  color: #6b7280;  
+}
+
+.res-card {
+  background: white;    
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.res-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15); 
+}
+
+.res-logo {
+  width: 150px;
+  height: 110px;
+}
+
+.res-container{
+  display: grid;   
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 30px;
+
+  max-width: 1200px;
+  margin: 0 auto;       
+  padding: 20px;
+}
+
+.res-card h3 {
+  font-size: 16px;
+  margin: 4px 0;
+}
+
+.res-card h4 {
+  font-size: 13px;
+  color: gray;
+   margin: 2px 0;
+}
+
+.res-card img {
+  width: 100%;
+  height: 140px;   
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+
+.res-info {
+  padding: 10px 5px;
+}
+
+
+.shimmer-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 30px;
+
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.shimmer-card {
+  width: 100%;     
+  height: 200px;    
+  border-radius: 16px;
+  background-color: #f0f0f0;
+}
+
+.login-btn {
+  padding: 8px 18px;
+  background-color: #ff7a00;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #e66a00;
+  transform: scale(1.05);  
+}
+
+
+.user-card{
+  padding: 10px;
+  border: 1px solid black;
+}
+
+.hamburger {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 10;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -260px;
+  width: 260px;
+  height: 100%;
+  background: white;
+  padding: 20px;
+  transition: 0.3s;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px 20px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  padding: 12px 0;
+}
+
+.sidebar.open {
+  right: 0;
+}
+.sidebar a:hover {
+  color: #ff7a00;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 20px;
+  }
+
+  .nav-items {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+   padding: 30px 20px;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+}
+
+.res-logo {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+/* About page typography */
+.About h1,
+.About h2,
+.About h3,
+.About h4,
+.About h5,
+.About h6 {
+  font-weight: 200;
+}
+
+/* Restaurant menu page */
+.menu-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.menu-restaurant-card {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 22px;
+}
+
+.menu-restaurant-name {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.menu-rating-line {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.menu-rating {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.menu-dot {
+  color: #6b7280;
+}
+
+.menu-cuisines {
+  color: #f97316;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.menu-location {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.menu-discount {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  color: #f97316;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.menu-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px 0 14px;
+}
+
+.menu-title-line {
+  width: 42px;
+  border-top: 1px solid #d1d5db;
+}
+
+.menu-title-text {
+  margin: 0 12px;
+  color: #6b7280;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+.menu-search-wrapper {
+  margin-bottom: 16px;
+}
+
+.menu-search-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f3f4f6;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-search-input:focus {
+  border-color: #fb923c;
+  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.2);
+}
+
+.menu-list {
+  margin-top: 8px;
+}
+
+.menu-category-block {
+  margin-bottom: 10px;
+}
+
+.menu-category-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+
+.menu-item-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid #d1d5db;
+  transition: background-color 0.2s ease;
+}
+
+.menu-item-row:hover {
+  background: #f9fafb;
+}
+
+.menu-item-left {
+  width: 72%;
+}
+
+.menu-veg-icon {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #16a34a;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.menu-veg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+.menu-item-name {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.menu-item-price {
+  margin-top: 4px;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.menu-item-rating {
+  margin-top: 5px;
+  color: #16a34a;
+  font-size: 14px;
+}
+
+.menu-item-rating-count {
+  color: #6b7280;
+}
+
+.menu-item-description {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #6b7280;
+}
+
+.menu-item-right {
+  width: 28%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.menu-item-image {
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.menu-add-btn {
+  margin-top: -14px;
+  background: #fff;
+  color: #16a34a;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.menu-customisable-text {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.menu-error-wrapper {
+  max-width: 860px;
+  margin: 40px auto;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.menu-error-title {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.menu-error-text {
+  color: #6b7280;
+}
+
+.menu-retry-btn {
+  margin-top: 14px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #f97316;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .menu-restaurant-name {
+    font-size: 24px;
+  }
+
+  .menu-category-title {
+    font-size: 19px;
+  }
+
+  .menu-item-row {
+    gap: 10px;
+  }
+
+  .menu-item-left {
+    width: 68%;
+  }
+
+  .menu-item-right {
+    width: 32%;
+  }
+
+  .menu-item-image {
+    width: 92px;
+    height: 92px;
+  }
+}
