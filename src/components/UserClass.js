@@ -34,7 +34,7 @@ componentDidUpdate(){
     console.log("component Did Update");
 }
 
-componentDidUnmount(){
+componentWillUnmount(){
      console.log("component will unmount");
 
 }

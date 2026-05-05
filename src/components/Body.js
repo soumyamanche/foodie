@@ -10,6 +10,7 @@ const Body = () => {
   const [filteredRestaurants,setFilteredRestaurants]=useState([]);
   const [isLoading, setIsLoading] = useState(true); 
   const [fetchError, setFetchError] = useState("");
+  const [showTopRatedOnly, setShowTopRatedOnly] = useState(false);
 
   const [searchText,setSearchText]=useState("") //whenever we change local state variable ,REACT rerenders the component
 
@@ -20,11 +21,16 @@ const Body = () => {
   //console.log("body rendered")//renders two times loads->render->api->rerenders........
     //console.log("useEffect called");//when thr body component render ,as soon as render cycle finish the useEffect is called
   useEffect(() => {
-    const filtered = ListOfRestaurant.filter((res) =>
-      res.info.name.toLowerCase().includes(searchText.toLowerCase())
-    );
+    const filtered = ListOfRestaurant.filter((res) => {
+      const matchesSearch = res?.info?.name
+        ?.toLowerCase()
+        .includes(searchText.toLowerCase());
+      const matchesRating = showTopRatedOnly ? Number(res?.info?.avgRating) > 4 : true;
+      return matchesSearch && matchesRating;
+    });
+
     setFilteredRestaurants(filtered);
-  }, [searchText, ListOfRestaurant]);
+  }, [searchText, ListOfRestaurant, showTopRatedOnly]);
 
   useEffect(() => {
     fetchData();
@@ -67,6 +73,10 @@ const Body = () => {
       const restaurants = json?.data?.cards //api call
         ?.filter(card => card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
         ?.flatMap(card => card?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+
+        console.log("Full API Data:", json);
+        console.log("Extracted Restaurants:", restaurants);
+        console.log("Number of Restaurants:", restaurants?.length);
 
       setListOfRestaurant(restaurants || []);
       setFilteredRestaurants(restaurants || []);
@@ -130,16 +140,12 @@ const Body = () => {
           </button>
         </div>
         
-        <button className="filter-btn"
-          onClick={() => {
-            //filter logic
-            const filteredList=ListOfRestaurant.filter(
-              (res)=>res.info.avgRating>4
-            );
-            setFilteredRestaurants(filteredList);
-          }} 
-          >
-          Top rated restaurant</button>
+        <button
+          className="filter-btn"
+          onClick={() => setShowTopRatedOnly((prev) => !prev)}
+        >
+          {showTopRatedOnly ? "Show all restaurants" : "Top rated restaurant"}
+        </button>
       </div>
 
      <div className="res-container"> 

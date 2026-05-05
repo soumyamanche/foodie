@@ -20,7 +20,9 @@ const RestaurantMenu = () => {
       setLoading(true);
       setError(false);
 
-      const data = await fetch(MENU_API + resId);
+      const menuUrl = MENU_API + resId;
+      const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(menuUrl);
+      const data = await fetch(proxyUrl);
       if (!data.ok) {
         throw new Error(`Request failed: ${data.status}`);
       }
@@ -62,20 +64,33 @@ const RestaurantMenu = () => {
   const regularCards =
     resInfo?.cards?.find((c) => c?.groupedCard)?.groupedCard?.cardGroupMap?.REGULAR?.cards || [];
 
-  const categories = regularCards.filter(
-    (c) =>
-      c?.card?.card?.itemCards &&
-      !c?.card?.card?.title?.includes("Items at")
-  );
+  const categories = regularCards
+    .map((c) => c?.card?.card)
+    .filter((card) => {
+      const hasDirectItems = Array.isArray(card?.itemCards) && card.itemCards.length > 0;
+      const hasNestedCategories =
+        Array.isArray(card?.categories) &&
+        card.categories.some((cat) => Array.isArray(cat?.itemCards) && cat.itemCards.length > 0);
+      return hasDirectItems || hasNestedCategories;
+    });
 
-  const filteredCategories = categories
+  const normalizedCategories = categories.flatMap((categoryCard) => {
+    if (Array.isArray(categoryCard?.itemCards) && categoryCard.itemCards.length > 0) {
+      return [{ title: categoryCard?.title || "Recommended", items: categoryCard.itemCards }];
+    }
+
+    return (categoryCard?.categories || []).map((nestedCategory) => ({
+      title: nestedCategory?.title || categoryCard?.title || "Recommended",
+      items: nestedCategory?.itemCards || [],
+    }));
+  });
+
+  const filteredCategories = normalizedCategories
     .map((category) => {
-      const title = category?.card?.card?.title;
-      const items = category?.card?.card?.itemCards || [];
-      const filteredItems = items.filter((item) =>
+      const filteredItems = category.items.filter((item) =>
         item?.card?.info?.name?.toLowerCase().includes(searchDish.toLowerCase())
       );
-      return { title, items: filteredItems };
+      return { title: category.title, items: filteredItems };
     })
     .filter((category) => category.items.length > 0);
 

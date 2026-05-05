@@ -133,6 +133,7 @@
   transition: transform 0.2s ease;
 }
 
+
 .res-card:hover {
   transform: scale(1.03);
   box-shadow: 0 6px 20px rgba(0,0,0,0.15); 
@@ -145,12 +146,14 @@
 
 .res-container{
   display: grid;   
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);  
   gap: 30px;
 
   max-width: 1200px;
   margin: 0 auto;       
   padding: 20px;
+
+  min-height: 100vh;  
 }
 
 .res-card h3 {
@@ -285,7 +288,9 @@
 
 body {
   font-family: system-ui, sans-serif;
+   overflow-y: auto;
 }
+
 
 .res-logo {
   width: 100%;
