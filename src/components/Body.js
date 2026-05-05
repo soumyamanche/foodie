@@ -13,6 +13,16 @@ const Body = () => {
   const [fetchError, setFetchError] = useState("");
   const [showTopRatedOnly, setShowTopRatedOnly] = useState(false);
 
+  const getRestaurantRating = (restaurant) => {
+    const rawRating =
+      restaurant?.info?.avgRating ??
+      restaurant?.info?.avgRatingString ??
+      "0";
+    const parsedRating = parseFloat(rawRating);
+    return Number.isFinite(parsedRating) ? parsedRating : 0;
+  };
+
+
   const [searchText,setSearchText]=useState("") //whenever we change local state variable ,REACT rerenders the component
 
   
@@ -26,7 +36,7 @@ const Body = () => {
       const matchesSearch = res?.info?.name
         ?.toLowerCase()
         .includes(searchText.toLowerCase());
-      const matchesRating = showTopRatedOnly ? Number(res?.info?.avgRating) > 4 : true;
+      const matchesRating = showTopRatedOnly ? getRestaurantRating(res) > 4 : true;
       return matchesSearch && matchesRating;
     });
 
@@ -117,7 +127,7 @@ const fetchData = async () => {
           className="filter-btn"
           onClick={() => setShowTopRatedOnly((prev) => !prev)}
         >
-          {showTopRatedOnly ? "Show all restaurants" : "Top rated restaurant"}
+          {showTopRatedOnly ? "Show all restaurants" : "Top rated restaurants"}
         </button>
       </div>
 
