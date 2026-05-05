@@ -41,14 +41,10 @@ const fetchData = async () => {
     setIsLoading(true);
     setFetchError("");
 
-<<<<<<< HEAD
-    const data = await fetch(swiggyApiUrl);
-=======
     const data = await fetch(`${API_BASE_URL}/api/restaurants`);
     if (!data.ok) {
       throw new Error(`Request failed: ${data.status}`);
     }
->>>>>>> 323ff31 (Use backend APIs for restaurants and menu; remove netlify functions)
     const json = await data.json();
 
     //optional chaninhg
