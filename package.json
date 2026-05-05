@@ -4,12 +4,12 @@
   "description": "this is my learning episode01",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html",
+    "build": "parcel build index.html --dist-dir build",
     "test": "jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
-    "url": "(https://github.com/soumyamanche/Namaste_react.git)"
+    "url": "https://github.com/soumyamanche/Namaste_react.git"
   },
   "keywords": [
     "soumya",
