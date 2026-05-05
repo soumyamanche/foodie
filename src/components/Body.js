@@ -2,6 +2,7 @@ import RestaurantCard from "./RestaurantCard";
 import {useState,useEffect} from "react";
 import Shimmer from "./Shimmer";
 import {Link} from "react-router-dom";
+import { API_BASE_URL } from "../utils/constants";
 
 
 const Body = () => {
@@ -40,7 +41,14 @@ const fetchData = async () => {
     setIsLoading(true);
     setFetchError("");
 
+<<<<<<< HEAD
     const data = await fetch(swiggyApiUrl);
+=======
+    const data = await fetch(`${API_BASE_URL}/api/restaurants`);
+    if (!data.ok) {
+      throw new Error(`Request failed: ${data.status}`);
+    }
+>>>>>>> 323ff31 (Use backend APIs for restaurants and menu; remove netlify functions)
     const json = await data.json();
 
     //optional chaninhg

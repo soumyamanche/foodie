@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "../utils/constants";
 
 const RestaurantMenu = () => {
   const [resInfo, setResInfo] = useState(null);
@@ -19,7 +20,7 @@ const RestaurantMenu = () => {
       setLoading(true);
       setError(false);
 
-      const response = await fetch(`/.netlify/functions/menu?resId=${resId}`);
+      const response = await fetch(`${API_BASE_URL}/api/menu?resId=${resId}`);
       if (!response.ok) {
         throw new Error(`Request failed: ${response.status}`);
       }
