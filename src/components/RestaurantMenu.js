@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
-import { MENU_API } from "../utils/constants";
 
 const RestaurantMenu = () => {
   const [resInfo, setResInfo] = useState(null);
@@ -20,30 +19,11 @@ const RestaurantMenu = () => {
       setLoading(true);
       setError(false);
 
-      const menuUrl = MENU_API + resId;
-      const urlsToTry = [
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(menuUrl)}`,
-        `https://corsproxy.io/?${encodeURIComponent(menuUrl)}`,
-      ];
-      let json = null;
-      let lastError = null;
-
-      for (const url of urlsToTry) {
-        try {
-          const data = await fetch(url);
-          if (!data.ok) {
-            throw new Error(`Request failed: ${data.status}`);
-          }
-          json = await data.json();
-          break;
-        } catch (requestError) {
-          lastError = requestError;
-        }
+      const response = await fetch(`/.netlify/functions/menu?resId=${resId}`);
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`);
       }
-
-      if (!json) {
-        throw lastError || new Error("All menu API requests failed");
-      }
+      const json = await response.json();
 
       const realData = json?.data?.data || json?.data;
 
