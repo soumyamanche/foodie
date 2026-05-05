@@ -35,60 +35,29 @@ const Body = () => {
   useEffect(() => {
     fetchData();
   }, []);
+const fetchData = async () => {
+  try {
+    setIsLoading(true);
+    setFetchError("");
 
-  const fetchData=async ()=>{
-    const swiggyApiUrl =
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.3426876&lng=78.3135288&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
+    const data = await fetch(swiggyApiUrl);
+    const json = await data.json();
 
-    const urlsToTry = [
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(swiggyApiUrl)}`,
-      `https://corsproxy.io/?${encodeURIComponent(swiggyApiUrl)}`
-    ];
+    //optional chaninhg
+    const restaurants = json?.data?.cards
+      ?.filter(card => card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+      ?.flatMap(card => card?.card?.card?.gridElements?.infoWithStyle?.restaurants);
 
-    try {
-      setIsLoading(true);
-      setFetchError("");
-
-      let json = null;
-      let lastError = null;
-
-      for (const url of urlsToTry) {
-        try {
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`);
-          }
-          json = await response.json();
-          break;
-        } catch (error) {
-          lastError = error;
-        }
-      }
-
-      if (!json) {
-        throw lastError || new Error("All restaurant API requests failed");
-      }
-
-      //optinal chaining
-      const restaurants = json?.data?.cards //api call
-        ?.filter(card => card?.card?.card?.gridElements?.infoWithStyle?.restaurants)
-        ?.flatMap(card => card?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-
-        console.log("Full API Data:", json);
-        console.log("Extracted Restaurants:", restaurants);
-        console.log("Number of Restaurants:", restaurants?.length);
-
-      setListOfRestaurant(restaurants || []);
-      setFilteredRestaurants(restaurants || []);
-    } catch (error) {
-      setFetchError("Failed to load restaurants. Please refresh or try again later.");
-      setListOfRestaurant([]);
-      setFilteredRestaurants([]);
-      console.warn("Restaurant fetch failed:", error?.message || error);
-    } finally {
-      setIsLoading(false);
-    }
+    setListOfRestaurant(restaurants || []);
+    setFilteredRestaurants(restaurants || []);
+  } catch (error) {
+    console.error(error);
+    setFetchError("Failed to load restaurants. Please refresh or try again later.");
+  } finally {
+    setIsLoading(false);
+  }
 };
+
 //conditinal rendering
 // if(ListOfRestaurant.length===0){
 //   return <Shimmer />;
@@ -164,6 +133,7 @@ const Body = () => {
 };
 
 export default Body;
+
 
 //react is re-rendering the whole body component ,but it is only updateing the input box value inside the DOM
 //REACT compares the OLD virtual DOM AND NEW VIRTUAL DOM
