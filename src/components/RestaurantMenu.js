@@ -21,12 +21,29 @@ const RestaurantMenu = () => {
       setError(false);
 
       const menuUrl = MENU_API + resId;
-      const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(menuUrl);
-      const data = await fetch(proxyUrl);
-      if (!data.ok) {
-        throw new Error(`Request failed: ${data.status}`);
+      const urlsToTry = [
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(menuUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(menuUrl)}`,
+      ];
+      let json = null;
+      let lastError = null;
+
+      for (const url of urlsToTry) {
+        try {
+          const data = await fetch(url);
+          if (!data.ok) {
+            throw new Error(`Request failed: ${data.status}`);
+          }
+          json = await data.json();
+          break;
+        } catch (requestError) {
+          lastError = requestError;
+        }
       }
-      const json = await data.json();
+
+      if (!json) {
+        throw lastError || new Error("All menu API requests failed");
+      }
 
       const realData = json?.data?.data || json?.data;
 
@@ -36,6 +53,7 @@ const RestaurantMenu = () => {
 
       setResInfo(realData);
     } catch (err) {
+      console.warn("Menu fetch failed:", err?.message || err);
       setError(true);
     } finally {
       setLoading(false);
