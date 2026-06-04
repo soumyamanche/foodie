@@ -1,8 +1,6 @@
 import React from "react";
 
 class UserClass extends React.Component {
-    //this is the best place to create state variables
-
     constructor(props) {
         super(props);
 
@@ -17,9 +15,6 @@ class UserClass extends React.Component {
 };
 
 async componentDidMount(){
-   // console.log(this.props.name +"child compoenent did mount");
-   //api calls
-
    const data = await fetch("https://api.github.com/users/soumyamanche");
    const json =await data.json();
 
@@ -45,49 +40,20 @@ componentWillUnmount(){
         console.log(this.props.name + "child Render");
 
         return (
-            <div className="user-card">
-                <img src={avatar_url} alt={name || "User avatar"} />
-                <h2>Name: {name}</h2>
-                <h3>Location: {location}</h3>
-                <h3>Contact: @soumya27</h3>
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6 max-w-sm hover:shadow-lg transition">
+                {avatar_url && (
+                  <img
+                    src={avatar_url}
+                    alt={name || "User avatar"}
+                    className="w-24 h-24 rounded-full object-cover mb-4 ring-2 ring-orange-100"
+                  />
+                )}
+                <h2 className="text-lg font-semibold text-gray-900 mb-1">Name: Soumya</h2>
+                <h3 className="text-gray-600 text-sm">Location: Hyderabad </h3>
+                <h3 className="text-gray-600 text-sm mt-1">Contact: @soumya27</h3>
             </div>
         );
     }
 }
 
 export default UserClass;
-
-
-
- /*
-parent constructor
-parent render
-
-{name: 'first', location: 'hyderabad'}
- child Constructor
-  child Render
-
-{name: 'second', location: 'us'}
-  child Constructor
-  child Render
-
-child compoenent did mount
-parent Component did Mount
-
-*/
-
-/*
-
-----MOUNTING------
-constructor(dummy)
-render(dummy)
-    <HTML dummy>
-    <this.setState> -> state variable is updated
-
-----update-----
-   render(api data)
-   <html (new api data)
-   componentDid update
-
-
-*/
