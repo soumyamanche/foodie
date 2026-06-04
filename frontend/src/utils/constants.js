@@ -7,7 +7,7 @@ export const LOGO_URL =
 export const MENU_API =
   "https://www.swiggy.com/mapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=17.3426876&lng=78.3135288&restaurantId=";
 
-const LOCAL_BACKEND_URL = "https://foodie-1-56d8.onrender.com";
+const LOCAL_BACKEND_URL = "https://foodie-2-dnf4.onrender.com/api/restaurants";
 
 export const API_BASE_URL =
   process.env.PARCEL_PUBLIC_API_BASE_URL || LOCAL_BACKEND_URL;
