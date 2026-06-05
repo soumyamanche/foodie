@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, startTransition } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -18,9 +18,8 @@ export default function Register() {
     try {
       const { user } = await createUserWithEmailAndPassword(auth, form.email, form.password);
       await updateProfile(user, { displayName: form.username });
-      navigate("/dashboard");
+      startTransition(() => navigate("/dashboard"));
     } catch (err) {
-      console.log(err);
       switch (err.code) {
         case "auth/email-already-in-use": setError("An account with this email already exists."); break;
         case "auth/weak-password":        setError("Password must be at least 6 characters."); break;
@@ -35,25 +34,17 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6 font-sans">
       <div className="bg-white border border-gray-200 rounded-2xl px-9 py-10 w-full max-w-sm shadow-lg">
-
-        {/* Brand */}
         <div className="font-serif text-3xl text-gray-900 mb-6">
           siw<span className="text-orange-500">ggy</span>
         </div>
-
         <h2 className="text-xl font-semibold text-gray-900 mb-1">Create account</h2>
         <p className="text-xs text-gray-500 mb-6">Join siwggy today</p>
-
-        {/* Error */}
         {error && (
           <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5 mb-4">
             {error}
           </div>
         )}
-
         <form onSubmit={handleSubmit} className="flex flex-col">
-
-          {/* Username */}
           <div className="mb-4">
             <label className="block text-[11px] text-gray-500 mb-1.5 tracking-wide">USERNAME</label>
             <input
@@ -66,8 +57,6 @@ export default function Register() {
               className="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-orange-500 placeholder:text-gray-400 transition"
             />
           </div>
-
-          {/* Email */}
           <div className="mb-4">
             <label className="block text-[11px] text-gray-500 mb-1.5 tracking-wide">EMAIL</label>
             <input
@@ -80,8 +69,6 @@ export default function Register() {
               className="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-orange-500 placeholder:text-gray-400 transition"
             />
           </div>
-
-          {/* Password */}
           <div className="mb-4">
             <label className="block text-[11px] text-gray-500 mb-1.5 tracking-wide">PASSWORD</label>
             <input
@@ -94,7 +81,6 @@ export default function Register() {
               className="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-3 text-sm text-gray-900 outline-none focus:border-orange-500 placeholder:text-gray-400 transition"
             />
           </div>
-
           <button
             type="submit"
             disabled={loading}
@@ -103,19 +89,15 @@ export default function Register() {
             {loading ? "Creating account..." : "Create Account"}
           </button>
         </form>
-
-        {/* Divider */}
         <div className="flex items-center gap-2.5 mb-4">
           <hr className="flex-1 border-gray-200" />
           <span className="text-[11px] text-gray-400">or</span>
           <hr className="flex-1 border-gray-200" />
         </div>
-
         <p className="text-center text-xs text-gray-500">
           Already have an account?{" "}
           <Link to="/login" className="text-orange-500 hover:text-orange-600">Sign in</Link>
         </p>
-
       </div>
     </div>
   );
