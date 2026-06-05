@@ -1,6 +1,5 @@
 // AI Search — calls Groq directly from browser (no backend needed)
-// Falls back to basic text search if Groq key missing or API fails
-
+// Falls back to basic text search if Groq key missing or API fail
 import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
 import { useState, useEffect, useRef, startTransition } from "react";
 import Shimmer from "./Shimmer";
@@ -177,7 +176,7 @@ const Body = () => {
   const inputRef = useRef(null);
   const cacheRef = useRef({});
 
-  // ── FIX: useNavigate instead of <Link> so we can wrap with startTransition ──
+
   const navigate = useNavigate();
 
   const getRating = (r) => {
@@ -244,7 +243,7 @@ const Body = () => {
     }
   }, [searchText, allRestaurants, topRated, aiMode]);
 
-  //  Core AI search: accepts query string directly (fixes async state bug)
+  // Core AI search: accepts query string directly (fixes async state bug)
   const triggerAiSearch = async (query) => {
     const q = query.trim();
 
@@ -297,7 +296,7 @@ const Body = () => {
     setAiSearching(false);
   };
 
-
+  // Button click — reads current searchText via closure (fine here since user typed it)
   const handleAiSearch = () => triggerAiSearch(searchText);
 
   const handleBasicSearch = () => {
@@ -490,7 +489,7 @@ const Body = () => {
           </div>
         ) : (
           filteredRestaurants.map((restaurant, i) => (
-            // ── FIX: replaced <Link> with <div> + startTransition to fix React error #426 ──
+            //  FIX: replaced <Link> with <div> + startTransition to fix React error
             // Suspense boundaries don't allow synchronous navigation triggers.
             // Wrapping navigate() in startTransition marks it as non-urgent,
             // which React allows inside Suspense.
