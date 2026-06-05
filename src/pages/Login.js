@@ -10,6 +10,12 @@ export default function Login() {
   const [loading, setLoading]   = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+  if (user) {
+    navigate("/dashboard");
+  }
+}, [user, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
