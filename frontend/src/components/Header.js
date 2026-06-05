@@ -1,5 +1,5 @@
 import { LOGO_URL } from "../utils/constants";
-import { useState } from "react";
+import { useState, startTransition } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
 import { useAuth } from "../context/AuthContext";
@@ -19,9 +19,9 @@ const Header = ({ toggleTheme, theme }) => {
   const handleAuthBtn = async () => {
     if (user) {
       await logout();
-      navigate("/");
+      startTransition(() => navigate("/"));
     } else {
-      navigate("/login");
+      startTransition(() => navigate("/login"));
     }
     setMenuOpen(false);
   };
@@ -32,7 +32,6 @@ const Header = ({ toggleTheme, theme }) => {
     { to: "/smart-assist", label: "Smart Assist", badge: "AI" },
     { to: "/help", label: "Help", badge: "?" },
   ];
-
 
   const isActive = (path) =>
     path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
@@ -52,7 +51,7 @@ const Header = ({ toggleTheme, theme }) => {
 
         {/* Desktop Nav */}
         <nav className="hidden md:block text-gray-900 dark:text-white">
-  <ul className="flex items-center gap-6">
+          <ul className="flex items-center gap-6">
             {/* Online status */}
             <li>
               <span
@@ -81,7 +80,6 @@ const Header = ({ toggleTheme, theme }) => {
                       </span>
                     )}
                   </span>
-                  {/* Active underline */}
                   {isActive(to) && (
                     <span className="absolute -bottom-[18px] left-0 right-0 h-0.5 bg-orange-500 rounded-full" />
                   )}
@@ -89,11 +87,11 @@ const Header = ({ toggleTheme, theme }) => {
               </li>
             ))}
 
-            {/* Cart */}
+            {/* Cart — FIX: wrapped navigate with startTransition */}
             <li>
               <div
                 className="relative cursor-pointer text-2xl"
-                onClick={() => navigate("/cart")}
+                onClick={() => startTransition(() => navigate("/cart"))}
               >
                 🛒
                 {totalQty > 0 && (
@@ -105,14 +103,14 @@ const Header = ({ toggleTheme, theme }) => {
             </li>
 
             {/* Theme Toggle */}
-<li>
-  <button
-  onClick={toggleTheme}
-  className="w-full text-left px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium transition"
->
-  {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
-</button>
-</li>
+            <li>
+              <button
+                onClick={toggleTheme}
+                className="w-full text-left px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium transition"
+              >
+                {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+              </button>
+            </li>
 
             {/* Login / Logout */}
             <li className="flex items-center gap-2">
@@ -196,11 +194,13 @@ const Header = ({ toggleTheme, theme }) => {
           </Link>
         ))}
 
-
-        {/* Mobile Cart */}
+        {/* Mobile Cart — FIX: wrapped navigate with startTransition */}
         <div
           className="flex items-center gap-2 cursor-pointer text-gray-600 hover:text-orange-500 font-medium text-sm transition"
-          onClick={() => { navigate("/cart"); setMenuOpen(false); }}
+          onClick={() => {
+            startTransition(() => navigate("/cart"));
+            setMenuOpen(false);
+          }}
         >
           <span className="text-xl">🛒</span>
           Cart
