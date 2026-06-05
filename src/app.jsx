@@ -14,53 +14,46 @@ import {
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
 import { Provider } from "react-redux";
-import appStore from "./store/appStore"; 
+import appStore from "./store/appStore";
 
 import React, { useState, useEffect, lazy, Suspense } from "react";
-const About = lazy(() => import("./components/About"));
-const SmartAssist = lazy(() => import("./components/SmartAssist"));
-const HelpCenter = lazy(() => import("./components/HelpCentre"));
-const Cart = lazy(() => import("./components/Cart"));
-const Login = lazy(() => import("./pages/Login"));
-const Register = lazy(() => import("./pages/Register"));
-const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
 
+const About         = lazy(() => import("./components/About"));
+const SmartAssist   = lazy(() => import("./components/SmartAssist"));
+const HelpCenter    = lazy(() => import("./components/HelpCentre"));
+const Cart          = lazy(() => import("./components/Cart"));
+const Login         = lazy(() => import("./pages/Login"));
+const Register      = lazy(() => import("./pages/Register"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const Dashboard     = lazy(() => import("./pages/Dashboard"));
+
+// Reusable fallback
+const PageLoader = () => (
+  <div className="flex items-center justify-center py-20">
+    <h2 className="text-lg font-semibold text-gray-600">Loading...</h2>
+  </div>
+);
 
 const AppLayout = () => {
   const [theme, setTheme] = useState(() => {
-  return localStorage.getItem("theme") || "light";
-});
+    return localStorage.getItem("theme") || "light";
+  });
 
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
- useEffect(() => {
-  localStorage.setItem("theme", theme);
-
-  document.documentElement.classList.toggle(
-    "dark",
-    theme === "dark"
-  );
-}, [theme]);
-
-
-  // Toggle cycle
- const toggleTheme = () => {
-  setTheme((prev) => (prev === "light" ? "dark" : "light"));
-};
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
   return (
     <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
-        <Header toggleTheme={toggleTheme} theme={theme} />
+      <Header toggleTheme={toggleTheme} theme={theme} />
       <main>
-        <Suspense
-          fallback={
-            <div className="flex items-center justify-center py-20">
-              <h2 className="text-lg font-semibold text-gray-600">
-                Loading...
-              </h2>
-            </div>
-          }
-        >
+        {/* Suspense wraps lazy-loaded routes only */}
+        <Suspense fallback={<PageLoader />}>
           <Outlet />
         </Suspense>
       </main>
@@ -76,7 +69,12 @@ const appRouter = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Body />,       
+        // Body is eagerly imported — wrap in its own Suspense
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Body />
+          </Suspense>
+        ),
       },
       {
         path: "about",
@@ -100,47 +98,63 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "restaurants/:resId",
-        element: <RestaurantMenu />, 
+        // RestaurantMenu is eagerly imported — wrap in its own Suspense
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <RestaurantMenu />
+          </Suspense>
+        ),
       },
       {
         path: "dashboard",
         element: (
           <PrivateRoute>
-            <Dashboard />     
+            <Dashboard />
           </PrivateRoute>
         ),
       },
     ],
   },
 
-  // Auth pages (outside AppLayout so no Header shown) 
+  // Auth pages — outside AppLayout, each wrapped individually
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <Login />
+      </Suspense>
+    ),
   },
   {
     path: "/register",
-    element: <Register />,
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <Register />
+      </Suspense>
+    ),
   },
   {
     path: "/forgot-password",
-    element: <ForgotPassword />,
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <ForgotPassword />
+      </Suspense>
+    ),
   },
 
-  //  Fallback: unknown routes go to home (Option 2) 
+  // Fallback
   {
     path: "*",
-    element: <Navigate to="/" replace />, 
+    element: <Navigate to="/" replace />,
   },
 ]);
 
-
-const root = ReactDOM.createRoot(document.getElementById("root"));//Used for Client-Side Routing
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <Provider store={appStore}>
     <AuthProvider>
-<RouterProvider router={appRouter} />
+      <RouterProvider router={appRouter} />
     </AuthProvider>
   </Provider>
 );
