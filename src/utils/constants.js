@@ -8,4 +8,4 @@ export const MENU_API =
   "https://www.swiggy.com/mapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=17.3426876&lng=78.3135288&restaurantId=";
 
 export const API_BASE_URL =
-  "https://backendpro-ni15.onrender.com";
+  "https://swipro.onrender.com";
