@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [email, setEmail]       = useState("");
@@ -9,12 +10,13 @@ export default function Login() {
   const [error, setError]       = useState("");
   const [loading, setLoading]   = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
-  if (user) {
-    navigate("/dashboard");
-  }
-}, [user, navigate]);
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +50,6 @@ export default function Login() {
         <h2 className="text-xl font-semibold text-gray-900 mb-1">Welcome back</h2>
         <p className="text-xs text-gray-500 mb-6">Sign in to your siwggy account</p>
 
-        {/* Error */}
         {error && (
           <div className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5 mb-4">
             {error}
@@ -57,7 +58,6 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="flex flex-col">
 
-          {/* Email */}
           <div className="mb-4">
             <label className="block text-[11px] text-gray-500 mb-1.5 tracking-wide">EMAIL</label>
             <input
@@ -70,7 +70,6 @@ export default function Login() {
             />
           </div>
 
-          {/* Password */}
           <div className="mb-2">
             <label className="block text-[11px] text-gray-500 mb-1.5 tracking-wide">PASSWORD</label>
             <input
@@ -83,7 +82,6 @@ export default function Login() {
             />
           </div>
 
-          {/* Forgot password */}
           <div className="flex justify-end mb-5">
             <Link to="/forgot-password" className="text-xs text-orange-500 hover:text-orange-600">
               Forgot password?
@@ -99,7 +97,6 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex items-center gap-2.5 mb-4">
           <hr className="flex-1 border-gray-200" />
           <span className="text-[11px] text-gray-400">or</span>
