@@ -365,58 +365,72 @@ const Body = () => {
       </div>
 
       <div className="max-w-2xl mx-auto px-4 -mt-5 relative z-10">
-        <div className="relative">
-          <div className="flex items-center bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden focus-within:ring-2 focus-within:ring-orange-300 transition-all">
-            <span className="pl-4 text-orange-400 text-base select-none flex-shrink-0">✦</span>
-            <input
-              ref={inputRef}
-              type="text"
-              className="flex-1 px-3 py-3.5 text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent"
-              placeholder="Try: best biryani, fast food nearby, noodles..."
-              value={searchText}
-              onChange={(e) => {
-                setSearchText(e.target.value);
-                setAiMode(false);
-                setAiIntent("");
-                setShowSuggestions(e.target.value.length === 0);
-              }}
-              onFocus={() => {
-                if (searchText.length === 0) setShowSuggestions(true);
-              }}
-              onBlur={() => setTimeout(() => setShowSuggestions(false), 160)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleAiSearch();
-              }}
-            />
-            {searchText && (
-              <button
-                onClick={clearSearch}
-                className="px-2 text-gray-400 hover:text-gray-600 transition text-sm"
-              >
-                ✕
-              </button>
-            )}
-            <button
-              onClick={handleBasicSearch}
-              className="px-3 py-2 m-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-lg transition whitespace-nowrap"
-            >
-              Search
-            </button>
-            <button
-              onClick={handleAiSearch}
-              disabled={aiSearching}
-              className="px-4 py-2 m-1 bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 whitespace-nowrap"
-            >
-              {aiSearching ? (
-                <>
-                  <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  Thinking…
-                </>
-              ) : (
-                <>✦ AI</>
-              )}
-            </button>
-          </div>
+  <div className="relative">
+    <div className="flex items-center w-full bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden focus-within:ring-2 focus-within:ring-orange-300 transition-all">
+      <span className="pl-4 text-orange-400 text-base select-none flex-shrink-0">
+        ✦
+      </span>
+
+      <input
+        ref={inputRef}
+        type="text"
+        className="flex-1 min-w-0 px-2 md:px-3 py-3.5 text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent"
+        placeholder="Try: best biryani, fast food nearby, noodles..."
+        value={searchText}
+        onChange={(e) => {
+          setSearchText(e.target.value);
+          setAiMode(false);
+          setAiIntent("");
+          setShowSuggestions(e.target.value.length === 0);
+        }}
+        onFocus={() => {
+          if (searchText.length === 0) setShowSuggestions(true);
+        }}
+        onBlur={() => setTimeout(() => setShowSuggestions(false), 160)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handleAiSearch();
+        }}
+      />
+
+      {searchText && (
+        <button
+          onClick={clearSearch}
+          className="px-2 text-gray-400 hover:text-gray-600 transition text-sm flex-shrink-0"
+        >
+          ✕
+        </button>
+      )}
+
+      <button
+        onClick={handleBasicSearch}
+        className="flex-shrink-0 px-2 md:px-3 py-2 m-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[10px] md:text-xs font-semibold rounded-lg transition whitespace-nowrap"
+      >
+        <span className="hidden sm:inline">Search</span>
+        <span className="sm:hidden">🔍</span>
+      </button>
+
+      <button
+        onClick={handleAiSearch}
+        disabled={aiSearching}
+        className="flex-shrink-0 px-2 md:px-4 py-2 m-1 bg-orange-500 hover:bg-orange-600 text-white text-[10px] md:text-xs font-bold rounded-lg transition flex items-center gap-1 whitespace-nowrap"
+      >
+        {aiSearching ? (
+          <>
+            <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+            <span className="hidden sm:inline">Thinking…</span>
+          </>
+        ) : (
+          <>
+            <span>✦</span>
+            <span className="hidden sm:inline">AI</span>
+          </>
+        )}
+      </button>
+    </div>
+
+    {/* Suggestions dropdown remains below this */}
+  </div>
+</div>
 
           {showSuggestions && (
             <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-40">
