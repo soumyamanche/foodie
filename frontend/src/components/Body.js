@@ -176,7 +176,6 @@ const Body = () => {
   const inputRef = useRef(null);
   const cacheRef = useRef({});
 
-
   const navigate = useNavigate();
 
   const getRating = (r) => {
@@ -348,6 +347,7 @@ const Body = () => {
 
   return (
     <section className="pb-16 bg-white dark:bg-black text-black dark:text-white">
+      {/* Hero banner */}
       <div className="relative bg-gradient-to-br from-orange-50 via-amber-50 to-white pt-10 pb-10 px-4 overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-orange-100 rounded-full -translate-y-1/2 translate-x-1/3 opacity-40 blur-3xl pointer-events-none" />
         <div className="relative max-w-2xl mx-auto text-center">
@@ -364,74 +364,73 @@ const Body = () => {
         </div>
       </div>
 
+      {/* Search bar + filters */}
       <div className="max-w-2xl mx-auto px-4 -mt-5 relative z-10">
-  <div className="relative">
-    <div className="flex items-center w-full bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden focus-within:ring-2 focus-within:ring-orange-300 transition-all">
-      <span className="pl-4 text-orange-400 text-base select-none flex-shrink-0">
-        ✦
-      </span>
+        {/* Input row */}
+        <div className="relative">
+          <div className="flex items-center w-full bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden focus-within:ring-2 focus-within:ring-orange-300 transition-all">
+            <span className="pl-4 text-orange-400 text-base select-none flex-shrink-0">
+              ✦
+            </span>
 
-      <input
-        ref={inputRef}
-        type="text"
-        className="flex-1 min-w-0 px-2 md:px-3 py-3.5 text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent"
-        placeholder="Try: best biryani, fast food nearby, noodles..."
-        value={searchText}
-        onChange={(e) => {
-          setSearchText(e.target.value);
-          setAiMode(false);
-          setAiIntent("");
-          setShowSuggestions(e.target.value.length === 0);
-        }}
-        onFocus={() => {
-          if (searchText.length === 0) setShowSuggestions(true);
-        }}
-        onBlur={() => setTimeout(() => setShowSuggestions(false), 160)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") handleAiSearch();
-        }}
-      />
+            <input
+              ref={inputRef}
+              type="text"
+              className="flex-1 min-w-0 px-2 md:px-3 py-3.5 text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent"
+              placeholder="Try: best biryani, fast food nearby, noodles..."
+              value={searchText}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+                setAiMode(false);
+                setAiIntent("");
+                setShowSuggestions(e.target.value.length === 0);
+              }}
+              onFocus={() => {
+                if (searchText.length === 0) setShowSuggestions(true);
+              }}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 160)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleAiSearch();
+              }}
+            />
 
-      {searchText && (
-        <button
-          onClick={clearSearch}
-          className="px-2 text-gray-400 hover:text-gray-600 transition text-sm flex-shrink-0"
-        >
-          ✕
-        </button>
-      )}
+            {searchText && (
+              <button
+                onClick={clearSearch}
+                className="px-2 text-gray-400 hover:text-gray-600 transition text-sm flex-shrink-0"
+              >
+                ✕
+              </button>
+            )}
 
-      <button
-        onClick={handleBasicSearch}
-        className="flex-shrink-0 px-2 md:px-3 py-2 m-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[10px] md:text-xs font-semibold rounded-lg transition whitespace-nowrap"
-      >
-        <span className="hidden sm:inline">Search</span>
-        <span className="sm:hidden">🔍</span>
-      </button>
+            <button
+              onClick={handleBasicSearch}
+              className="flex-shrink-0 px-2 md:px-3 py-2 m-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[10px] md:text-xs font-semibold rounded-lg transition whitespace-nowrap"
+            >
+              <span className="hidden sm:inline">Search</span>
+              <span className="sm:hidden">🔍</span>
+            </button>
 
-      <button
-        onClick={handleAiSearch}
-        disabled={aiSearching}
-        className="flex-shrink-0 px-2 md:px-4 py-2 m-1 bg-orange-500 hover:bg-orange-600 text-white text-[10px] md:text-xs font-bold rounded-lg transition flex items-center gap-1 whitespace-nowrap"
-      >
-        {aiSearching ? (
-          <>
-            <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-            <span className="hidden sm:inline">Thinking…</span>
-          </>
-        ) : (
-          <>
-            <span>✦</span>
-            <span className="hidden sm:inline">AI</span>
-          </>
-        )}
-      </button>
-    </div>
+            <button
+              onClick={handleAiSearch}
+              disabled={aiSearching}
+              className="flex-shrink-0 px-2 md:px-4 py-2 m-1 bg-orange-500 hover:bg-orange-600 text-white text-[10px] md:text-xs font-bold rounded-lg transition flex items-center gap-1 whitespace-nowrap"
+            >
+              {aiSearching ? (
+                <>
+                  <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  <span className="hidden sm:inline">Thinking…</span>
+                </>
+              ) : (
+                <>
+                  <span>✦</span>
+                  <span className="hidden sm:inline">AI</span>
+                </>
+              )}
+            </button>
+          </div>
 
-    {/* Suggestions dropdown remains below this */}
-  </div>
-</div>
-
+          {/* Suggestions dropdown — sits inside the relative wrapper so it aligns to the input */}
           {showSuggestions && (
             <div className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-40">
               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-4 pt-3 pb-1">
@@ -453,6 +452,7 @@ const Body = () => {
           )}
         </div>
 
+        {/* AI intent banner */}
         {aiIntent && aiIntent !== "Searching..." && (
           <div className="mt-2.5 flex items-center gap-2 bg-orange-50 border border-orange-100 rounded-xl px-4 py-2 text-sm text-orange-700">
             <span>✦</span>
@@ -468,6 +468,7 @@ const Body = () => {
           </div>
         )}
 
+        {/* Filter chips */}
         <div className="flex items-center gap-3 mt-3 flex-wrap">
           <button
             onClick={() => {
@@ -492,6 +493,7 @@ const Body = () => {
         </div>
       </div>
 
+      {/* Restaurant grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 max-w-7xl mx-auto px-4 md:px-6 mt-8">
         {filteredRestaurants.length === 0 ? (
           <div className="col-span-full flex flex-col items-center py-16 text-center">
@@ -503,7 +505,7 @@ const Body = () => {
           </div>
         ) : (
           filteredRestaurants.map((restaurant, i) => (
-            //  FIX: replaced <Link> with <div> + startTransition to fix React error
+            // FIX: replaced <Link> with <div> + startTransition to fix React error
             // Suspense boundaries don't allow synchronous navigation triggers.
             // Wrapping navigate() in startTransition marks it as non-urgent,
             // which React allows inside Suspense.
