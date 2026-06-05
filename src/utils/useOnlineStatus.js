@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 
 const useOnlineStatus = () => {
-  const [onlineStatus, setOnlineStatus] = useState(navigator.onLine);
+  // Read navigator.onLine after mount, not during render
+  const [onlineStatus, setOnlineStatus] = useState(true);
 
   useEffect(() => {
+    setOnlineStatus(navigator.onLine);
+
     const handleOnline = () => setOnlineStatus(true);
     const handleOffline = () => setOnlineStatus(false);
 
