@@ -2,9 +2,9 @@
 // Falls back to basic text search if Groq key missing or API fails
 
 import RestaurantCard, { withPromotedLabel } from "./RestaurantCard";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, startTransition } from "react";
 import Shimmer from "./Shimmer";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../utils/constants";
 import useOnlineStatus from "../utils/useOnlineStatus";
 
@@ -177,6 +177,9 @@ const Body = () => {
   const inputRef = useRef(null);
   const cacheRef = useRef({});
 
+  // ── FIX: useNavigate instead of <Link> so we can wrap with startTransition ──
+  const navigate = useNavigate();
+
   const getRating = (r) => {
     const raw = r?.info?.avgRating ?? r?.info?.avgRatingString ?? "0";
     const n = parseFloat(raw);
@@ -241,7 +244,7 @@ const Body = () => {
     }
   }, [searchText, allRestaurants, topRated, aiMode]);
 
-  // ─── Core AI search: accepts query string directly (fixes async state bug) ───
+  //  Core AI search: accepts query string directly (fixes async state bug)
   const triggerAiSearch = async (query) => {
     const q = query.trim();
 
@@ -294,7 +297,7 @@ const Body = () => {
     setAiSearching(false);
   };
 
-  // Button click — reads current searchText via closure (fine here since user typed it)
+
   const handleAiSearch = () => triggerAiSearch(searchText);
 
   const handleBasicSearch = () => {
@@ -425,8 +428,6 @@ const Body = () => {
                 <button
                   key={s}
                   className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition flex items-center gap-2"
-                  // FIX: pass suggestion text directly to triggerAiSearch
-                  // Previously only setSearchText(s) was called — never triggered a search
                   onMouseDown={() => {
                     setShowSuggestions(false);
                     triggerAiSearch(s);
@@ -489,17 +490,25 @@ const Body = () => {
           </div>
         ) : (
           filteredRestaurants.map((restaurant, i) => (
-            <Link
+            // ── FIX: replaced <Link> with <div> + startTransition to fix React error #426 ──
+            // Suspense boundaries don't allow synchronous navigation triggers.
+            // Wrapping navigate() in startTransition marks it as non-urgent,
+            // which React allows inside Suspense.
+            <div
               key={`${getId(restaurant)}-${i}`}
-              to={"/restaurants/" + getId(restaurant)}
-              className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 rounded-lg"
+              onClick={() => {
+                startTransition(() => {
+                  navigate("/restaurants/" + getId(restaurant));
+                });
+              }}
+              className="block cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 rounded-lg"
             >
               {isPromoted(restaurant) ? (
                 <RestaurantCardPromoted resData={restaurant} />
               ) : (
                 <RestaurantCard resData={restaurant} />
               )}
-            </Link>
+            </div>
           ))
         )}
       </div>
