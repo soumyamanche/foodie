@@ -140,7 +140,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));//Used for Cli
 root.render(
   <Provider store={appStore}>
     <AuthProvider>
-      <RouterProvider router={appRouter} />
+<RouterProvider router={appRouter} future={{ v7_startTransition: true }} />
     </AuthProvider>
   </Provider>
 );
